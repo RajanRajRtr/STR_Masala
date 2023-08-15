@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Card, Checkbox, Grid, styled, TextField, useTheme ,Step,Stepper,StepLabel,Typography } from "@mui/material";
+import { Box, Button, Card, Checkbox, Grid, styled, TextField, useTheme ,Step,Stepper,StepLabel,Typography,MenuItem } from "@mui/material";
 import { MatxDivider } from "app/components";
 import { FlexAlignCenter, FlexBox } from "app/components/FlexBox";
 import { Paragraph } from "app/components/Typography";
@@ -71,14 +71,24 @@ const FirebaseRegister = () => {
           name: "lastname",
           label: "Lastname",
           type: "text",
-          validation: { required: "Email is required" },
+          validation: { required: "Lastname is required" },
+        },{
+          name: "phonenumber",
+          label: "Mobileno",
+          type: "text",
+          validation: { required: "Mobileno is required" },
         },{
           name: "email",
           label: "Email",
           type: "email",
           validation: { required: "Email is required" },
         },
-        {
+        
+        
+      ],
+    },
+    {fields:[
+       {
           name: "password",
           label: "Password",
           type: "password",
@@ -90,23 +100,52 @@ const FirebaseRegister = () => {
                 "Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 8 characters long",
             },
           },
+        }, {
+          name: "confirmpassword",
+          label: "confirmpassword",
+          type: "password",
+          validation: {
+            required: "Password is required",
+            pattern: {
+              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+              message:
+                "Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 8 characters long",
+            },
+          },
         },
-        
-      ],
-    },
+    ]},
     {
       fields: [
         {
-          name: "firstName",
-          label: "First Name",
-          type: "text",
-          validation: { required: "First Name is required" },
+          name: "country",
+          label: "Country",
+           type: "select", // Use "select" for dropdown
+        options: ["USA", "Canada", "UK", "Australia"], // Add your dropdown options here
+          validation: { required: "Country is required" },
         },
         {
-          name: "lastName",
-          label: "Last Name",
+          name: "state",
+          label: "State",  type: "select",
+        options: ["State 1", "State 2", "State 3", "State 4"], // Sample options
+ 
+          validation: { required: " State is required" },
+        },  {
+          name: "city",
+          label: "City",
+          type: "select",
+        options: ["City 1", "City 2", "City 3", "City 4"], 
+          validation: { required: " City is required" },
+        },  {
+          name: "district ",
+          label: "District ",
+         type: "select",
+        options: ["District 1", "District 2", "District 3", "District 4"],
+          validation: { required: " District is required" },
+        }, {
+          name: "pincode ",
+          label: "Pincode ",
           type: "text",
-          validation: { required: "Last Name is required" },
+          validation: { required: " Pincode is required" },
         },
       ],
     },
@@ -202,26 +241,55 @@ const onSubmit = async(data) => {
 
             <Box p={4} height="100%">
                   <form onSubmit={handleSubmit(onSubmit)}>
-                   {currentStepFields.map((field) => (
-                    <TextField
-                      key={field.name}
-                      fullWidth
-                      size="small"
-                      name={field.name}
-                      type={field.type}
-                      label={field.label}
-                      variant="outlined"
-                      {...register(field.name, field.validation)}
-                      error={!!errors[field.name]}
-                      helperText={errors[field.name] && errors[field.name].message}
-                      sx={{
-                        mb: 1.5,
-                        ...(watch(field.name) && !errors[field.name]
-                          ? { color: "green" }
-                          : {}),
-                      }}
-                    />
-                  ))}
+                {currentStepFields.map((field) => (
+  <React.Fragment key={field.name}>
+    {field.type === "select" ? (
+      <TextField
+        select
+        fullWidth
+        size="small"
+        name={field.name}
+        label={field.label}
+        variant="outlined"
+        {...register(field.name, field.validation)}
+        error={!!errors[field.name]}
+        helperText={errors[field.name] && errors[field.name].message}
+        sx={{
+          mb: 1.5,
+          ...(watch(field.name) && !errors[field.name]
+            ? { color: "green" }
+            : {}),
+        }}
+      >
+        {field.options.map((option) => (
+          <MenuItem key={option} value={option}>
+            {option}
+          </MenuItem>
+        ))}
+      </TextField>
+    ) : (
+      <TextField
+        key={field.name}
+        fullWidth
+        size="small"
+        name={field.name}
+        type={field.type}
+        label={field.label}
+        variant="outlined"
+        {...register(field.name, field.validation)}
+        error={!!errors[field.name]}
+        helperText={errors[field.name] && errors[field.name].message}
+        sx={{
+          mb: 1.5,
+          ...(watch(field.name) && !errors[field.name]
+            ? { color: "green" }
+            : {}),
+        }}
+      />
+    )}
+  </React.Fragment>
+))}
+
 
                     {/* <FlexBox gap={1} alignItems="center">
                       <Checkbox
