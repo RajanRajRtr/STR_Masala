@@ -35,6 +35,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-highlight": "^0.15.0",
+    "react-hook-form": "^7.45.4",
     "react-perfect-scrollbar": "^1.5.8",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.1",

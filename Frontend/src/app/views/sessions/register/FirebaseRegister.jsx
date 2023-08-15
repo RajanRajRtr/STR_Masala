@@ -1,14 +1,15 @@
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Card, Checkbox, Grid, styled, TextField, useTheme } from "@mui/material";
+import { Box, Button, Card, Checkbox, Grid, styled, TextField, useTheme ,Step,Stepper,StepLabel,Typography } from "@mui/material";
 import { MatxDivider } from "app/components";
 import { FlexAlignCenter, FlexBox } from "app/components/FlexBox";
 import { Paragraph } from "app/components/Typography";
 import useAuth from "app/hooks/useAuth";
-import { Formik } from "formik";
+import { useForm } from "react-hook-form";
+
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import * as Yup from "yup";
+
 
 const ContentBox = styled(FlexAlignCenter)(({ theme }) => ({
   height: "100%",
@@ -17,7 +18,17 @@ const ContentBox = styled(FlexAlignCenter)(({ theme }) => ({
 }));
 
 const IMG = styled("img")(() => ({ width: "100%" }));
+const StyledStepper = styled(Stepper)(({ theme }) => ({
+  backgroundColor: "transparent",
+ 
+}));
 
+const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
+  "& .MuiStepLabel-label": {
+ 
+    fontWeight: "bold",
+  },
+}));
 const GoogleButton = styled(Button)(({ theme }) => ({
   color: "rgba(0, 0, 0, 0.87)",
   backgroundColor: "#e0e0e0",
@@ -39,12 +50,7 @@ const initialValues = {
 };
 
 // form field validation schema
-const validationSchema = Yup.object().shape({
-  password: Yup.string()
-    .min(6, "Password must be 6 character length")
-    .required("Password is required!"),
-  email: Yup.string().email("Invalid Email address").required("Email is required!"),
-});
+
 
 const FirebaseRegister = () => {
   const theme = useTheme();
@@ -53,6 +59,67 @@ const FirebaseRegister = () => {
   const [loading, setLoading] = useState(false);
   const { createUserWithEmail, signInWithGoogle } = useAuth();
 
+  const formSteps = [
+    {
+      fields: [
+        {
+          name: "firstname",
+          label: "Firstname",
+          type: "text",
+          validation: { required: "Firstname is required" },
+        },{
+          name: "lastname",
+          label: "Lastname",
+          type: "text",
+          validation: { required: "Email is required" },
+        },{
+          name: "email",
+          label: "Email",
+          type: "email",
+          validation: { required: "Email is required" },
+        },
+        {
+          name: "password",
+          label: "Password",
+          type: "password",
+          validation: {
+            required: "Password is required",
+            pattern: {
+              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+              message:
+                "Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 8 characters long",
+            },
+          },
+        },
+        
+      ],
+    },
+    {
+      fields: [
+        {
+          name: "firstName",
+          label: "First Name",
+          type: "text",
+          validation: { required: "First Name is required" },
+        },
+        {
+          name: "lastName",
+          label: "Last Name",
+          type: "text",
+          validation: { required: "Last Name is required" },
+        },
+      ],
+    },
+    // Add more steps as needed
+  ];
+    const [activeStep, setActiveStep] = useState(0);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm();
   const handleGoogleRegister = async () => {
     try {
       await signInWithGoogle();
@@ -61,22 +128,34 @@ const FirebaseRegister = () => {
       setLoading(false);
     }
   };
-
-  const handleFormSubmit = async (values) => {
-    try {
-      setLoading(true);
-      await createUserWithEmail(values.email, values.password);
-      navigate("/");
-      enqueueSnackbar("Register Successfully!", { variant: "success" });
-    } catch (e) {
-      setLoading(false);
-      enqueueSnackbar(e.message, { variant: "error" });
+const onSubmit = async(data) => {
+   if (activeStep === formSteps.length - 1) {
+      // If it's the last step, submit the entire form
+      try {
+         alert(JSON.stringify(data));
+        setLoading(true);
+        await createUserWithEmail(data.email, data.password);
+        navigate("/");
+        enqueueSnackbar("Register Successfully!", { variant: "success" });
+      } catch (e) {
+        setLoading(false);
+        enqueueSnackbar(e.message, { variant: "error" });
+      }
+    } else {
+      // Otherwise, move to the next step
+      setActiveStep(activeStep + 1);
     }
+  }; // your form submit function which will invoke after successful validation
+  const currentStepFields = formSteps[activeStep].fields;
+  console.log(watch("example")); // you can watch individual input by pass the name of the input
+ 
+  const handleBack = () => {
+    setActiveStep(activeStep - 1);
   };
-
   return (
     <RegisterRoot>
       <Card className="card">
+        
         <Grid container>
           <Grid item lg={5} md={5} sm={5} xs={12}>
             <ContentBox>
@@ -86,56 +165,65 @@ const FirebaseRegister = () => {
 
           <Grid item lg={7} md={7} sm={7} xs={12}>
             <Box px={4} pt={4}>
-              <GoogleButton
+              <StyledStepper activeStep={activeStep}  >
+                {formSteps.map((step, index) => (
+                  <Step key={index}  sx={{
+                        '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+                          fill: 'black',
+                      },
+                    }}>
+                  <StyledStepLabel    StepIconProps={{
+                  sx: {
+                      width: "30px",
+                          height: "30px",
+                    "&.Mui-completed": {
+                      background: "white",
+                      borderRadius: "50px",color:'green'
+                    }
+                  }
+                }}
+                >
+               {step.label}
+                </StyledStepLabel>
+                  </Step>
+                ))}
+              </StyledStepper>
+              {/* <GoogleButton
                 fullWidth
                 variant="contained"
                 onClick={handleGoogleRegister}
                 startIcon={<img src="/assets/images/logos/google.svg" alt="google" />}
               >
                 Sign In With Google
-              </GoogleButton>
+              </GoogleButton> */}
             </Box>
 
-            <MatxDivider sx={{ mt: 3, px: 4 }} text="Or" />
+            {/* <MatxDivider sx={{ mt: 3, px: 4 }} text="Or" /> */}
 
             <Box p={4} height="100%">
-              <Formik
-                onSubmit={handleFormSubmit}
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-              >
-                {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                   {currentStepFields.map((field) => (
                     <TextField
+                      key={field.name}
                       fullWidth
                       size="small"
-                      type="email"
-                      name="email"
-                      label="Email"
+                      name={field.name}
+                      type={field.type}
+                      label={field.label}
                       variant="outlined"
-                      onBlur={handleBlur}
-                      value={values.email}
-                      onChange={handleChange}
-                      helperText={touched.email && errors.email}
-                      error={Boolean(errors.email && touched.email)}
-                      sx={{ mb: 3 }}
+                      {...register(field.name, field.validation)}
+                      error={!!errors[field.name]}
+                      helperText={errors[field.name] && errors[field.name].message}
+                      sx={{
+                        mb: 1.5,
+                        ...(watch(field.name) && !errors[field.name]
+                          ? { color: "green" }
+                          : {}),
+                      }}
                     />
-                    <TextField
-                      fullWidth
-                      size="small"
-                      name="password"
-                      type="password"
-                      label="Password"
-                      variant="outlined"
-                      onBlur={handleBlur}
-                      value={values.password}
-                      onChange={handleChange}
-                      helperText={touched.password && errors.password}
-                      error={Boolean(errors.password && touched.password)}
-                      sx={{ mb: 1.5 }}
-                    />
+                  ))}
 
-                    <FlexBox gap={1} alignItems="center">
+                    {/* <FlexBox gap={1} alignItems="center">
                       <Checkbox
                         size="small"
                         name="remember"
@@ -147,17 +235,29 @@ const FirebaseRegister = () => {
                       <Paragraph fontSize={13}>
                         I have read and agree to the terms of service.
                       </Paragraph>
-                    </FlexBox>
-
-                    <LoadingButton
+                    </FlexBox> */}
+                     <Box sx={{ display: "flex"}}>
+                    {activeStep > 0 && (
+                      <LoadingButton
+                        variant="contained"
+                        color="primary"
+                        onClick={handleBack}
+                        sx={{ my: 2, mr: 1 }}
+                      >
+                        Back
+                      </LoadingButton>
+                    )}
+                 <LoadingButton
                       type="submit"
                       color="primary"
                       loading={loading}
                       variant="contained"
                       sx={{ my: 2 }}
                     >
-                      Regiser
+                        {activeStep === formSteps.length - 1 ? "Register" : "Next"}
                     </LoadingButton>
+                    </Box>
+
 
                     <Paragraph>
                       Already have an account?
@@ -169,8 +269,7 @@ const FirebaseRegister = () => {
                       </NavLink>
                     </Paragraph>
                   </form>
-                )}
-              </Formik>
+             
             </Box>
           </Grid>
         </Grid>
