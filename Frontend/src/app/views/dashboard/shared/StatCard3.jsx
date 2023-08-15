@@ -5,23 +5,38 @@ const StatCard3 = () => {
   const statList = [
     {
       icon: "people",
-      amount: 10495,
-      title: "New Members",
+      count: 95,
+      title: "Number of Brands",
     },
     {
       icon: "location_on_outlined",
-      amount: 30942,
-      title: "Places added",
+      count: 942,
+      title: "Number of Categories",
     },
     {
       icon: "keyboard_voice",
-      amount: 45269,
-      title: "Support Members",
+      count: 4,
+      title: "Number of Users",
     },
     {
       icon: "card_giftcard",
-      amount: 20965,
-      title: "Tags Used",
+      count: 20965,
+      title: "Number of Products",
+    },
+    {
+      icon: "location_on_outlined",
+      count: "9cr",
+      title: "Total Revenue",
+    },
+    {
+      icon: "keyboard_voice",
+      count: 25,
+      title: "Total Orders",
+    },
+    {
+      icon: "card_giftcard",
+      count: 0,
+      title: "Cancelled Orders",
     },
   ];
   const { palette } = useTheme();
@@ -45,7 +60,7 @@ const StatCard3 = () => {
                 </IconButton>
               </div>
               <Box ml={2}>
-                <H3 sx={{ mt: "-4px", fontSize: "32px" }}>{item.amount.toLocaleString()}</H3>
+                <H3 sx={{ mt: "-4px", fontSize: "32px" }}>{item.count.toLocaleString()}</H3>
                 <Paragraph sx={{ m: 0, color: textMuted }}>{item.title}</Paragraph>
               </Box>
             </Card>
