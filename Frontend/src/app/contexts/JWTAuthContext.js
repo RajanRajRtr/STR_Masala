@@ -78,7 +78,6 @@ export const AuthProvider = ({ children }) => {
       username,
       password,
     });
-
     const { accessToken, user } = data;
     setSession(accessToken);
     dispatch({ type: "REGISTER", payload: { user } });
@@ -125,7 +124,9 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ ...state, method: "JWT", login, logout, register }}>
+    <AuthContext.Provider
+      value={{ ...state, method: "JWT", login, logout, register }}
+    >
       {children}
     </AuthContext.Provider>
   );
