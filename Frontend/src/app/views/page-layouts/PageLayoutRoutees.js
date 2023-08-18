@@ -2,7 +2,7 @@ import Loadable from "app/components/Loadable";
 import { lazy } from "react";
 
 const LeftSidebarCard = Loadable(lazy(() => import("./LeftSidebarCard")));
-const UserProfile = Loadable(lazy(() => import("./user-profile/UserProfile")));
+const UserProfile = Loadable(lazy(() => import("./user-profile/DummyProfile")));
 
 const pageLayoutRoutes = [
   {
