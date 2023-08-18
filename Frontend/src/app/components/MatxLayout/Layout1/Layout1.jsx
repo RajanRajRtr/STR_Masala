@@ -5,7 +5,7 @@ import { sidenavCompactWidth, sideNavWidth } from "app/utils/constant";
 import React, { useEffect, useRef } from "react";
 import Scrollbar from "react-perfect-scrollbar";
 import { Outlet } from "react-router-dom";
-import Footer from "../../Footer";
+// import Footer from "../../Footer";
 import SidenavTheme from "../../MatxTheme/SidenavTheme";
 import SecondarySidebar from "../../SecondarySidebar/SecondarySidebar";
 import Layout1Sidenav from "./Layout1Sidenav";
@@ -113,7 +113,7 @@ const Layout1 = () => {
               </MatxSuspense>
             </Box>
 
-            {settings.footer.show && !settings.footer.fixed && <Footer />}
+            {/* {settings.footer.show && !settings.footer.fixed && <Footer />} */}
           </StyledScrollBar>
         )}
 
@@ -131,11 +131,11 @@ const Layout1 = () => {
               </MatxSuspense>
             </Box>
 
-            {settings.footer.show && !settings.footer.fixed && <Footer />}
+            {/* {settings.footer.show && !settings.footer.fixed && <Footer />} */}
           </ContentBox>
         )}
 
-        {settings.footer.show && settings.footer.fixed && <Footer />}
+        {/* {settings.footer.show && settings.footer.fixed && <Footer />} */}
       </LayoutContainer>
 
       {settings.secondarySidebar.show && <SecondarySidebar />}

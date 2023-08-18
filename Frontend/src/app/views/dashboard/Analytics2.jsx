@@ -1,7 +1,8 @@
-import { MoreHoriz } from "@mui/icons-material";
-import { Card, Grid, IconButton, MenuItem, styled, TextField } from "@mui/material";
-import { FlexBetween } from "app/components/FlexBox";
-import { H3, Span } from "app/components/Typography";
+import {
+  styled,
+  TextField,
+} from "@mui/material";
+
 import StatCard3 from "./shared/StatCard3";
 
 const AnalyticsRoot = styled("div")(({ theme }) => ({
@@ -12,13 +13,7 @@ const AnalyticsRoot = styled("div")(({ theme }) => ({
 const Analytics2 = () => {
   return (
     <AnalyticsRoot>
-     
-
       <StatCard3 />
-
-      
-
-
     </AnalyticsRoot>
   );
 };

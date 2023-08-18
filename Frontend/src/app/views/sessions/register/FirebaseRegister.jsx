@@ -113,9 +113,6 @@ const FirebaseRegister = () => {
             },
           },
         },
-    ]},
-    {
-      fields: [
         {
           name: "country",
           label: "Country",
@@ -129,7 +126,11 @@ const FirebaseRegister = () => {
         options: ["State 1", "State 2", "State 3", "State 4"], // Sample options
  
           validation: { required: " State is required" },
-        },  {
+        }
+    ]},
+    {
+      fields: [
+         {
           name: "city",
           label: "City",
           type: "select",
@@ -227,17 +228,8 @@ const onSubmit = async(data) => {
                   </Step>
                 ))}
               </StyledStepper>
-              {/* <GoogleButton
-                fullWidth
-                variant="contained"
-                onClick={handleGoogleRegister}
-                startIcon={<img src="/assets/images/logos/google.svg" alt="google" />}
-              >
-                Sign In With Google
-              </GoogleButton> */}
+              
             </Box>
-
-            {/* <MatxDivider sx={{ mt: 3, px: 4 }} text="Or" /> */}
 
             <Box p={4} height="100%">
                   <form onSubmit={handleSubmit(onSubmit)}>
@@ -291,19 +283,6 @@ const onSubmit = async(data) => {
 ))}
 
 
-                    {/* <FlexBox gap={1} alignItems="center">
-                      <Checkbox
-                        size="small"
-                        name="remember"
-                        onChange={handleChange}
-                        checked={values.remember}
-                        sx={{ padding: 0 }}
-                      />
-
-                      <Paragraph fontSize={13}>
-                        I have read and agree to the terms of service.
-                      </Paragraph>
-                    </FlexBox> */}
                      <Box sx={{ display: "flex"}}>
                     {activeStep > 0 && (
                       <LoadingButton
